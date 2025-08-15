@@ -129,3 +129,23 @@ class Branch extends Model
 
 $branches = Branch::with('sales')->get(); // Always 2 queries
 ```
+
+## One to Many (Polymorphic)
+Always use `chaperone()` to avoid sneaky N + 1.
+```php
+<?php
+ 
+...
+ 
+class Post extends Model
+{
+    /**
+     * Get the comments for the blog post.
+     */
+    public function comments(): HasMany
+    {
+        return $this->morphMany(Comment::class, 'commentable')->chaperone();
+    }
+}
+```
+- Normally, even with eager loading, accessing the parent from each child (e.g. `$comment->post`) can trigger additional queries per child. Using `->chaperone()` hydrates the parent model automatically, preventing that sneaky N + 1 problem.
