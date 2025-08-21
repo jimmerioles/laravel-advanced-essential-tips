@@ -13,6 +13,20 @@ Model::preventSilentlyDiscardingAttributes(! $this->app->isProduction());
 - Errors if you try to set or retrieve an attribute that isn’t actually defined for that model.
 - Catch typos, outdated column names, or incorrect mass assignment keys during development.
 
+## Default Attribute Values
+```php
+class Post extends Model
+{
+    protected $attributes = [
+        'is_published' => false,
+        'view_count' => 0,
+        'status' => 'draft',
+    ];
+}
+```
+- With this approach, new model instances will have these default values before they're saved.
+- As a result, you would be able to change the default values, without changing/migrating the database structure.
+
 ## Retrieving Models
 Most of the time use `lazy()` in queries for chunking + memory efficient per model access.
 ```php
